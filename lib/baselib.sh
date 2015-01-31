@@ -24,9 +24,10 @@ function createDirIfNotExists {
   # @see: rerun_log
   # @errors:
   #   10: Given directory already exists.
-  #   20: User did not allow creation of directory.
+  #   20: Could not create directory.
+  #   30: User did not allow creation of directory.
   #
-  local ANS;
+  local ANS, MKDIRRV;
   rerun_log debug "Entering createDirIfNotExists with ${#} arguments";
 
   [ -d "${1}" ] && {
@@ -43,9 +44,15 @@ function createDirIfNotExists {
     rerun_log info "Creating directory at \"${1}\"";
     mkdir -p "${1}";
 
+    MKDIRRV=$?;
+    if [ ${MKDIRRV} -ne 0 ]; then
+      rerun_log debug ">> mkdir returned \"${MKDIRRV}\"";
+      return 20;
+    fi
+
     return 0;
   else
     rerun_log debug ">> User did not allow creation of directory at \"${1}\"";
-    return 20;
+    return 30;
   fi
 }
