@@ -11,6 +11,10 @@ HOST_FILE_LOC="/etc/host";
 HFM_DIR="${HOME}/.hfm";
 DEFAULT_FILE="$HFM_DIR/default";
 
+
+# - - -
+# Functions declared here.
+# - - -
 function createDirIfNotExists {
   # Usage: createDirIfNotExists <atPath>
   #
@@ -106,3 +110,8 @@ function createFileByCpIfNotExists {
     return 0;
   fi
 }
+
+# - - -
+# Proxy functions declared here.
+# (= functions without own functionality, which only call other functions)
+# - - -
