@@ -24,8 +24,9 @@ function createDirIfNotExists {
   # @see: rerun_log
   # @errors:
   #   10: Given directory already exists.
-  #   20: Could not create directory.
-  #   30: User did not allow creation of directory.
+  #   20: Given directory is not writable.
+  #   30: Could not create directory.
+  #   40: User did not allow creation of directory.
   #
   local ANS, MKDIRRV;
   rerun_log debug "Entering createDirIfNotExists with ${#} arguments";
@@ -33,6 +34,11 @@ function createDirIfNotExists {
   [ -d "${1}" ] && {
     rerun_log debug ">> Directory \"${1}\" already exists.";
     return 10;
+  }
+
+  [ -w "${1}" ] && {
+    rerun_log debug ">> Directory \"${1}\" already exists but is not writable.";
+    return 20;
   }
 
   # Everything ready to create directory, so ask user.
@@ -47,12 +53,12 @@ function createDirIfNotExists {
     MKDIRRV=$?;
     if [ ${MKDIRRV} -ne 0 ]; then
       rerun_log debug ">> mkdir returned \"${MKDIRRV}\"";
-      return 20;
+      return 30;
     fi
 
     return 0;
   else
     rerun_log debug ">> User did not allow creation of directory at \"${1}\"";
-    return 30;
+    return 40;
   fi
 }
