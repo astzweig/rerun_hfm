@@ -22,6 +22,8 @@ function createDirIfNotExists {
   #
   # @version: 1.0
   # @see: rerun_log
+  # @examples:
+  #   createDirIfNotExists ${HFM_DIR}
   # @errors:
   #   10: Given directory already exists.
   #   20: Given directory is not writable.
@@ -75,6 +77,8 @@ function createFileByCpIfNotExists {
   #
   # @version: 1.0
   # @see: rerun_log
+  # @examples:
+  #   createFileByCpIfNotExists ${HFM_DIR}/default /etc/host
   # @errors:
   #   10: <fromPathSuggestion> is not a valid path to a file.
   #   20: User disallowed using <fromPathSuggestion> as source for file.
