@@ -23,11 +23,18 @@ then
 fi
 
 # Include general functions needed by all commands
-[[ -f "${RERUN_MODULE_DIR}/lib/baselib.sh" ]] &&
+if [ -f "${RERUN_MODULE_DIR}/lib/baselib.sh" ]; then
   source "${RERUN_MODULE_DIR}/lib/baselib.sh" || {
     rerun_log warn "Could not source >baselib.sh<. Resuming tough.";
     return 0;
-  }
+  };
+
+  # Run proxy functions
+  # @TODO: check if shell compatible with other shells
+  for funcs in $(declare -f | grep '^f_*' | sed 's/()//g'); do
+    $funcs;
+  done
+fi
 
 # - - -
 # Your functions declared here.
