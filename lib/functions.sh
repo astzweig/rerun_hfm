@@ -41,10 +41,12 @@ fi
 # - - -
 
 # Include command specific functions
-for file in ${RERUN_MODULE_DIR}/lib/*${1}-functions.sh;
+for file in $(ls ${RERUN_MODULE_DIR}/lib/*${1}-functions.sh 2> /dev/null);
 do
-  source "${file}" || {
-    rerun_log error "Could not include ${file}. Resuming tough.";
-    return 0;
-  };
+  if [ -f "${file}" ]; then
+    source "${file}" || {
+      rerun_log error "Could not include ${file}. Resuming tough.";
+      return 0;
+    };
+  fi
 done;
