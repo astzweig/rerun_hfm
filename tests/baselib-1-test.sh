@@ -8,9 +8,21 @@
 
 # Include baselib file
 # -----------------
-BASELIB_PATH="${RERUN_MODULES}/$(basename $(cd ..; pwd))/lib/baselib.sh";
+MODULE="$(basename $(cd ..; pwd))";
+BASELIB_PATH="${RERUN_MODULES}/${MODULE}/lib/baselib.sh";
 if [ ! -f ${BASELIB_PATH} ]; then
     exit;
 fi
 
 source ${BASELIB_PATH};
+
+# The Plan
+# --------
+
+describe "baselib - createDirIfNotExists"
+
+it_stops_with_no_arguments() {
+  local RETV;
+  RETV="$(createDirIfNotExists && echo $? || echo $?)";
+  test ${RETV} -eq 10;
+}
