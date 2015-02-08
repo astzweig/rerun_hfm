@@ -52,3 +52,15 @@ it_stops_with_mkdir_not_working() {
   test ${RETV} -eq 30;
   test ! -d ${TESTDIR};
 }
+
+it_works_with_user_answer_being_y_or_yes() {
+  local RETV TMPD="$(pwd)/.${MODULE}5.$$";
+  trap "rm -rf \"${TMPD}\"" EXIT INT;
+  RETV="$(createDirIfNotExists ${TMPD} <<< "yes" && echo $? || echo $?)";
+  test ${RETV} -eq 0;
+  test -d ${TMPD};
+  rm -rf ${TMPD};
+  RETV="$(createDirIfNotExists ${TMPD} <<< "y" && echo $? || echo $?)";
+  test ${RETV} -eq 0;
+  test -d ${TMPD};
+}
