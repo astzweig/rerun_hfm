@@ -8,7 +8,7 @@
 
 # Include baselib file
 # -----------------
-BASELIB_PATH="${RERUN_MODULES}/$(dirname ..)/lib/baselib.sh";
+BASELIB_PATH="${RERUN_MODULES}/$(basename $(cd ..; pwd))/lib/baselib.sh";
 if [ ! -f ${BASELIB_PATH} ]; then
     exit;
 fi
