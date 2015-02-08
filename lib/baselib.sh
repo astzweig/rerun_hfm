@@ -123,7 +123,7 @@ function f_checkIfAppAlreadyInitialized {
   if [ ! -d "${HFM_DIR}" ]; then
     RETURNVAL=$(createDirIfNotExists "${HFM_DIR}");
 
-    if [ ${RETURNVAL} -gt 10 ]; then
+    if [ ! -d "${HFM_DIR}" ]; then
       rerun_die 10 "Could not create default app dir. Aborting...";
     fi
   fi
@@ -132,7 +132,7 @@ function f_checkIfAppAlreadyInitialized {
     RETURNVAL = $(createFileByCpIfNotExists
                   "${DEFAULT_FILE}" "${HOST_FILE_LOC}");
 
-    if [ ${RETURNVAL} -eq 20 ]; then
+    if [ ! -f "${DEFAULT_FILE}" ]; then
       rerun_die 20 "Please provide a default hosts file \
         with default entries at ${DEFAULT_FILE}";
     fi
