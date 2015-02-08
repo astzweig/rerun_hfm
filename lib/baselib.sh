@@ -37,9 +37,8 @@ function createDirIfNotExists {
   # @errors:
   #   10: No atPath given
   #   20: Given directory already exists.
-  #   30: Given directory is not writable.
-  #   40: Could not create directory.
-  #   50: User did not allow creation of directory.
+  #   30: Could not create directory.
+  #   40: User did not allow creation of directory.
   #
   local ANS MKDIRRV;
   rerun_log debug "Entering ${FUNCNAME} with ${#} arguments";
@@ -66,13 +65,13 @@ function createDirIfNotExists {
     MKDIRRV=$?;
     if [ ${MKDIRRV} -ne 0 ]; then
       rerun_log debug ">> mkdir returned \"${MKDIRRV}\"";
-      return 40;
+      return 30;
     fi
 
     return 0;
   else
     rerun_log debug ">> User did not allow creation of directory at \"${1}\"";
-    return 50;
+    return 40;
   fi
 }
 
