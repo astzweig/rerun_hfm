@@ -54,11 +54,6 @@ function createDirIfNotExists {
     return 20;
   }
 
-  [ -w "${1}" ] && {
-    rerun_log debug ">> Directory \"${1}\" already exists but is not writable.";
-    return 30;
-  }
-
   # Everything ready to create directory, so ask user.
   read -p "A directory at \"${1}\" is required.\
            Shall one be created now? (y/n)" ANS;
