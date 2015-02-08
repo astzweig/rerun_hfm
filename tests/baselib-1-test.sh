@@ -26,3 +26,11 @@ it_stops_with_no_arguments() {
   RETV="$(createDirIfNotExists && echo $? || echo $?)";
   test ${RETV} -eq 10;
 }
+
+it_stops_with_dir_already_existing() {
+  local RETV TMPD="$(pwd)/.${MODULE}1.$$";
+  [ ! -d "${TMPD}" ] && mkdir ${TMPD};
+  trap "rm -rf \"${TMPD}\"" EXIT INT;
+  RETV="$(createDirIfNotExists ${TMPD} && echo $? || echo $?)";
+  test ${RETV} -eq 20;
+}
