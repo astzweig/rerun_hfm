@@ -42,3 +42,13 @@ it_stops_with_user_answer_being_not_yes() {
   test ${RETV} -eq 40;
   test ! -d ${TMPD};
 }
+
+it_stops_with_mkdir_not_working() {
+  local RETV TMPD="$(pwd)/.${MODULE}4.$$" TESTDIR="${TMPD}/somedir";
+  [ ! -d "${TMPD}" ] && mkdir ${TMPD};
+  trap "rm -rf \"${TMPD}\"" EXIT INT;
+  chmod a-w ${TMPD};
+  RETV="$(createDirIfNotExists ${TESTDIR} <<< "y" && echo $? || echo $?)";
+  test ${RETV} -eq 30;
+  test ! -d ${TESTDIR};
+}
