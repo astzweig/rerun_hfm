@@ -1,5 +1,5 @@
 # Shell functions for the hfm module.
-#/ usage: source RERUN_MODULE_DIR/lib/baselib.sh command
+#/ usage: source RERUN_MODULE_DIR/lib/baselib.sh
 #
 # Author: Ines Neubach <ines.neubach@idn.astzweig.de>
 #
@@ -10,6 +10,12 @@
 HOST_FILE_LOC="/etc/host";
 HFM_DIR="${HOME}/.hfm";
 DEFAULT_FILE="$HFM_DIR/default";
+
+if [ -z "$(declare -f | grep '^rerun_log' | sed 's/()//g')" ]; then
+  function rerun_log {
+    echo $2 1>&2 ;
+  }
+fi
 
 
 # - - -
@@ -35,7 +41,7 @@ function createDirIfNotExists {
   #   40: Could not create directory.
   #   50: User did not allow creation of directory.
   #
-  local ANS, MKDIRRV;
+  local ANS MKDIRRV;
   rerun_log debug "Entering ${FUNCNAME} with ${#} arguments";
 
   [ -z "${1}" ] && {
