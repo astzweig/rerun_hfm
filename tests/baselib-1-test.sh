@@ -34,3 +34,11 @@ it_stops_with_dir_already_existing() {
   RETV="$(createDirIfNotExists ${TMPD} && echo $? || echo $?)";
   test ${RETV} -eq 20;
 }
+
+it_stops_with_user_answer_being_not_yes() {
+  local RETV TMPD="$(pwd)/.${MODULE}3.$$";
+  test ! -d ${TMPD};
+  RETV="$(createDirIfNotExists ${TMPD} <<< "n" && echo $? || echo $?)";
+  test ${RETV} -eq 40;
+  test ! -d ${TMPD};
+}
