@@ -29,22 +29,28 @@ function createDirIfNotExists {
   # @examples:
   #   createDirIfNotExists ${HFM_DIR}
   # @errors:
-  #   10: Given directory already exists.
-  #   20: Given directory is not writable.
-  #   30: Could not create directory.
-  #   40: User did not allow creation of directory.
+  #   10: No atPath given
+  #   20: Given directory already exists.
+  #   30: Given directory is not writable.
+  #   40: Could not create directory.
+  #   50: User did not allow creation of directory.
   #
   local ANS, MKDIRRV;
-  rerun_log debug "Entering createDirIfNotExists with ${#} arguments";
+  rerun_log debug "Entering ${FUNCNAME} with ${#} arguments";
+
+  [ -z "${1}" ] && {
+    rerun_log debug ">> Wrong arguments. Call: ${FUNCNAME} <atPath>";
+    return 10;
+  }
 
   [ -d "${1}" ] && {
     rerun_log debug ">> Directory \"${1}\" already exists.";
-    return 10;
+    return 20;
   }
 
   [ -w "${1}" ] && {
     rerun_log debug ">> Directory \"${1}\" already exists but is not writable.";
-    return 20;
+    return 30;
   }
 
   # Everything ready to create directory, so ask user.
@@ -59,13 +65,13 @@ function createDirIfNotExists {
     MKDIRRV=$?;
     if [ ${MKDIRRV} -ne 0 ]; then
       rerun_log debug ">> mkdir returned \"${MKDIRRV}\"";
-      return 30;
+      return 40;
     fi
 
     return 0;
   else
     rerun_log debug ">> User did not allow creation of directory at \"${1}\"";
-    return 40;
+    return 50;
   fi
 }
 
