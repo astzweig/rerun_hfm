@@ -26,3 +26,10 @@ it_stops_with_no_arguments() {
   RETV="$(createFileByCpIfNotExists && echo $? || echo $?)";
   test ${RETV} -eq 10;
 }
+
+it_stops_with_source_path_being_empty() {
+  local RETV DEST_FN="somefilename.txt";
+  RETV="$(createFileByCpIfNotExists "${DEST_FN}" && echo $? || echo $?)";
+  test ${RETV} -eq 20;
+  test ! -f "${DEST_FN}";
+}
