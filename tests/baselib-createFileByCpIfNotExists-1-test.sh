@@ -72,3 +72,19 @@ it_works_with_source_already_existing() {
   test -f "${DEST_FN}";
   test ! -f "${SRC_FN}";
 }
+
+it_works_with_user_allowing_source_creation() {
+  local RETV DEST_FN="${MODULE}-notexistingfile1-$$.txt";
+  local SRC_FN="${MODULE}-existingfile1-$$.txt" TESTSTR="Hello-World-$$";
+  [ ! -f "${SRC_FN}" ] && echo "${TESTSTR}" >> "${SRC_FN}";
+  trap "rm -f ${DEST_FN}" EXIT INT;
+  trap "rm -f ${SRC_FN}" EXIT INT;
+  test ! -f "${DEST_FN}";
+  test -f "${SRC_FN}";
+
+  RETV="$(createFileByCpIfNotExists ${DEST_FN} ${SRC_FN} <<< "yes" && echo $? || echo $?)";
+  test ${RETV} -eq 0;
+  test -f "${DEST_FN}";
+  test "$(cat ${DEST_FN})" = "${TESTSTR}";
+  test -f "${SRC_FN}";
+}
