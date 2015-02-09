@@ -97,15 +97,16 @@ function createFileByCpIfNotExists {
   rerun_log debug "Entering ${FUNCNAME} with ${#} arguments";
 
   if [ ! -f "${1}" ]; then
+    rerun_log debug ">> File at '${1}' does not exist";
     local USEDEFF;
 
     if [ -z "${1}" ]; then
-      rerun_log debug "No <atPath> provided";
+      rerun_log debug ">> Empty/No <atPath> provided";
       return 10;
     fi
 
     if [ ! -f "${2}" ]; then
-      rerun_log debug "File at ${1} doesn't exist and suggested source file \
+      rerun_log debug ">> File at ${1} doesn't exist and suggested source file \
       at ${2} does not exist either.";
       return 20;
     fi
@@ -113,14 +114,14 @@ function createFileByCpIfNotExists {
     read -p "No file found at ${1}, shall ${2} be copied there? (y/n)" USEDEFF;
 
     if [[ ${USEDEFF} == y* || ${USEDEFF} == Y* ]]; then
-      rerun_log debug ">> mkdir \"${DEFAULT_FILE}\"";
+      rerun_log info "Creating file '${1}' by copying '${2}'";
       cp "${2}" "${1}";
     else
-      rerun_log debug "User disallowed coping ${2} to ${1}";
+      rerun_log debug ">> User disallowed coping ${2} to ${1}";
       return 30;
     fi
   else
-    rerun_log debug "File ${1} already exists. All right then.";
+    rerun_log debug ">> File ${1} already exists. All right then.";
     return 0;
   fi
 }
