@@ -44,6 +44,21 @@ it_stops_with_source_being_empty_or_invalid() {
   test ! -f "${SRC_FN}";
 }
 
+it_stops_with_user_disallowing_source_creation() {
+  local RETV DEST_FN="${MODULE}-notexistingfile1-$$.txt";
+  local SRC_FN="${MODULE}-existingfile1-$$.txt";
+  [ ! -f "${SRC_FN}" ] && touch "${SRC_FN}";
+  trap "rm -f \"${SRC_FN}\"" EXIT INT;
+  trap "rm -f \"${DEST_FN}\"" EXIT INT;
+  test ! -f "${DEST_FN}";
+  test -f "${SRC_FN}";
+
+  RETV="$(createFileByCpIfNotExists ${DEST_FN} ${SRC_FN} <<< "no" && echo $? || echo $?)";
+  test ${RETV} -eq 30;
+  test ! -f "${DEST_FN}";
+  test -f "${SRC_FN}";
+}
+
 it_works_with_source_already_existing() {
   local RETV DEST_FN="${MODULE}-existingfile1-$$.txt";
   local SRC_FN="${MODULE}-notexistingfile1-$$.txt"
