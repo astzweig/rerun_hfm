@@ -27,9 +27,19 @@ it_stops_with_no_arguments() {
   test ${RETV} -eq 10;
 }
 
-it_stops_with_source_path_being_empty() {
-  local RETV DEST_FN="${MODULE}-somefile-$$.txt";
-  RETV="$(createFileByCpIfNotExists "${DEST_FN}" && echo $? || echo $?)";
+it_stops_with_source_being_empty_or_invalid() {
+  local RETV DEST_FN="${MODULE}-notexistingfile1-$$.txt";
+  local SRC_FN="${MODULE}-notexistingfile2-$$.txt"
+  test ! -f "${DEST_FN}";
+  test ! -f "${SRC_FN}";
+
+  RETV="$(createFileByCpIfNotExists \"${DEST_FN}\" \"\" && echo $? || echo $?)";
   test ${RETV} -eq 20;
   test ! -f "${DEST_FN}";
+  test ! -f "${SRC_FN}";
+
+  RETV="$(createFileByCpIfNotExists \"${DEST_FN}\" \"${SRC_FN}\" && echo $? || echo $?)";
+  test ${RETV} -eq 20;
+  test ! -f "${DEST_FN}";
+  test ! -f "${SRC_FN}";
 }
