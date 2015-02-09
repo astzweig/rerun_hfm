@@ -15,3 +15,14 @@ if [ ! -f ${BASELIB_PATH} ]; then
 fi
 
 source ${BASELIB_PATH};
+
+# The Plan
+# --------
+
+describe "baselib - createFileByCpIfNotExists"
+
+it_stops_with_no_arguments() {
+  local RETV;
+  RETV="$(createFileByCpIfNotExists && echo $? || echo $?)";
+  test ${RETV} -eq 10;
+}
