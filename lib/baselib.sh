@@ -90,16 +90,24 @@ function createFileByCpIfNotExists {
   # @examples:
   #   createFileByCpIfNotExists ${HFM_DIR}/default /etc/host
   # @errors:
-  #   10: <fromPathSuggestion> is not a valid path to a file.
-  #   20: User disallowed using <fromPathSuggestion> as source for file.
+  #   10: <atPath> is empty.
+  #   20: <fromPathSuggestion> is not a valid path to a file.
+  #   30: User disallowed using <fromPathSuggestion> as source for file.
   #
+  rerun_log debug "Entering ${FUNCNAME} with ${#} arguments";
+
   if [ ! -f "${1}" ]; then
     local USEDEFF;
+
+    if [ -z "${1}" ]; then
+      rerun_log debug "No <atPath> provided";
+      return 10;
+    fi
 
     if [ ! -f "${2}" ]; then
       rerun_log debug "File at ${1} doesn't exist and suggested source file \
       at ${2} does not exist either.";
-      return 10;
+      return 20;
     fi
 
     read -p "No file found at ${1}, shall ${2} be copied there? (y/n)" USEDEFF;
@@ -109,7 +117,7 @@ function createFileByCpIfNotExists {
       cp "${2}" "${1}";
     else
       rerun_log debug "User disallowed coping ${2} to ${1}";
-      return 20;
+      return 30;
     fi
   else
     rerun_log debug "File ${1} already exists. All right then.";
