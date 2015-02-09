@@ -28,7 +28,7 @@ it_stops_with_no_arguments() {
 }
 
 it_stops_with_source_path_being_empty() {
-  local RETV DEST_FN="somefilename.txt";
+  local RETV DEST_FN="${MODULE}-somefile-$$.txt";
   RETV="$(createFileByCpIfNotExists "${DEST_FN}" && echo $? || echo $?)";
   test ${RETV} -eq 20;
   test ! -f "${DEST_FN}";
