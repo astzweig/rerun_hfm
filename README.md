@@ -41,11 +41,11 @@ Add "example.de" host with default IP "127.0.0.1" to "development" host file:
     
     # Backup /etc/host and replace it with newly created
     # development host file
-    rerun hfm:activate
+    rerun hfm:activate -e development
 
 To get original host file back run:
 
-    rerun hfm:activate -e default
+    rerun hfm:activate
 
 Features
 ----
