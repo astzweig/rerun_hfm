@@ -28,6 +28,14 @@ if [ -f "${RERUN_MODULE_DIR}/lib/baselib.sh" ]; then
     rerun_log warn "Could not source >baselib.sh<. Resuming tough.";
     return 0;
   };
+fi
+
+# Include initalizer functions
+if [ -f "${RERUN_MODULE_DIR}/lib/initializers.sh" ]; then
+  source "${RERUN_MODULE_DIR}/lib/initializers.sh" || {
+    rerun_log warn "Could not source >initializers.sh<.";
+    return 0;
+  };
 
   # Run proxy functions
   # @TODO: check if shell compatible with other shells
