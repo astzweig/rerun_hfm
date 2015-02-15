@@ -33,12 +33,12 @@ it_stops_with_source_being_empty_or_invalid() {
   test ! -f "${DEST_FN}";
   test ! -f "${SRC_FN}";
 
-  RETV="$(createFileByCpIfNotExists ${DEST_FN} \"\" && echo $? || echo $?)";
+  RETV="$(createFileByCpIfNotExists \"\" ${DEST_FN} && echo $? || echo $?)";
   test ${RETV} -eq 20;
   test ! -f "${DEST_FN}";
   test ! -f "${SRC_FN}";
 
-  RETV="$(createFileByCpIfNotExists ${DEST_FN} ${SRC_FN} && echo $? || echo $?)";
+  RETV="$(createFileByCpIfNotExists ${SRC_FN} ${DEST_FN} && echo $? || echo $?)";
   test ${RETV} -eq 20;
   test ! -f "${DEST_FN}";
   test ! -f "${SRC_FN}";
@@ -52,7 +52,7 @@ it_stops_with_user_disallowing_source_creation() {
   test ! -f "${DEST_FN}";
   test -f "${SRC_FN}";
 
-  RETV="$(createFileByCpIfNotExists ${DEST_FN} ${SRC_FN} <<< "no" && echo $? || echo $?)";
+  RETV="$(createFileByCpIfNotExists ${SRC_FN} ${DEST_FN} <<< "no" && echo $? || echo $?)";
   test ${RETV} -eq 30;
   test ! -f "${DEST_FN}";
   test -f "${SRC_FN}";
@@ -66,7 +66,7 @@ it_works_with_source_already_existing() {
 
   test -f "${DEST_FN}";
   test ! -f "${SRC_FN}";
-  RETV="$(createFileByCpIfNotExists ${DEST_FN} ${SRC_FN} && echo $? || echo $?)";
+  RETV="$(createFileByCpIfNotExists ${SRC_FN} ${DEST_FN} && echo $? || echo $?)";
   test ${RETV} -eq 0;
   test -f "${DEST_FN}";
   test ! -f "${SRC_FN}";
@@ -80,7 +80,7 @@ it_works_with_user_allowing_source_creation() {
   test ! -f "${DEST_FN}";
   test -f "${SRC_FN}";
 
-  RETV="$(createFileByCpIfNotExists ${DEST_FN} ${SRC_FN} <<< "yes" && echo $? || echo $?)";
+  RETV="$(createFileByCpIfNotExists ${SRC_FN} ${DEST_FN} <<< "yes" && echo $? || echo $?)";
   test ${RETV} -eq 0;
   test -f "${DEST_FN}";
   test "$(cat ${DEST_FN})" == "${TESTSTR}";

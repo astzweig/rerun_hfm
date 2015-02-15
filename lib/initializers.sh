@@ -36,7 +36,7 @@ function f_checkIfAppAlreadyInitialized {
 
   if [ ! -f "${DEFAULT_FILE}" ]; then
     RETURNVAL = $(createFileByCpIfNotExists
-                  "${DEFAULT_FILE}" "${HOST_FILE_LOC}");
+                  "${HOST_FILE_LOC}" "${DEFAULT_FILE}");
 
     if [ ! -f "${DEFAULT_FILE}" ]; then
       rerun_die 20 "Please provide a default hosts file \
