@@ -7,9 +7,9 @@
 # - - -
 # Constants declared here.
 # - - -
-HOST_FILE_LOC="/etc/host";
+HOST_FILE_LOC="/etc/hosts";
 HFM_DIR="${HOME}/.hfm";
-DEFAULT_FILE="$HFM_DIR/default";
+DEFAULT_FILE="${HFM_DIR}/default";
 
 if [ -z "$(declare -f | grep '^rerun_log' | sed 's/()//g')" ]; then
   function rerun_log {
@@ -35,8 +35,8 @@ function f_checkIfAppAlreadyInitialized {
   fi
 
   if [ ! -f "${DEFAULT_FILE}" ]; then
-    RETURNVAL = $(createFileByCpIfNotExists
-                  "${HOST_FILE_LOC}" "${DEFAULT_FILE}");
+    RETURNVAL=$(createFileByCpIfNotExists \
+                "${HOST_FILE_LOC}" "${DEFAULT_FILE}");
 
     if [ ! -f "${DEFAULT_FILE}" ]; then
       rerun_die 20 "Please provide a default hosts file \
