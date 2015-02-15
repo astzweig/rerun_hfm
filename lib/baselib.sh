@@ -62,52 +62,62 @@ function createDirIfNotExists {
 }
 
 function createFileByCpIfNotExists {
-  # Usage: createFileByCpIfNotExists <atPath> <fromPathSuggestion>
+  # Usage: createFileByCpIfNotExists <fromPathSuggestion> <atPath>
   #
   # Copies a file from a suggested path if user agrees and file
   # does not exists already.
   #
   # @args:
+  #   str fromPathSuggestion: A suggestion path, where the file shall be copied
+  #                           from.
   #   str atPath: The path, where the file shall be copied to.
-  #   str fromPathSuggestion: A suggestion path, where the file shall be copied from.
   #
   # @version: 1.0
   # @see: rerun_log
   # @examples:
-  #   createFileByCpIfNotExists ${HFM_DIR}/default /etc/host
+  #   createFileByCpIfNotExists /etc/host ${HFM_DIR}/default
   # @errors:
-  #   10: <atPath> is empty.
+  #   10: <fromPathSuggestion> is empty.
   #   20: <fromPathSuggestion> is not a valid path to a file.
-  #   30: User disallowed using <fromPathSuggestion> as source for file.
+  #   30: <atPath> is empty.
+  #   40: User disallowed using <fromPathSuggestion> as source for file.
   #
   rerun_log debug "Entering ${FUNCNAME} with ${#} arguments";
+  local USEDEFF PTEXT="" NEEDROOT="n";
 
-  if [ ! -f "${1}" ]; then
-    rerun_log debug ">> File at '${1}' does not exist";
-    local USEDEFF;
-
+  if [ ! -f "${2}" ]; then
     if [ -z "${1}" ]; then
-      rerun_log debug ">> Empty/No <atPath> provided";
+      rerun_log debug ">> Empty/No <fromPathSuggestion> provided";
       return 10;
-    fi
-
-    if [ ! -f "${2}" ]; then
-      rerun_log debug ">> File at ${1} doesn't exist and suggested source file \
-      at ${2} does not exist either.";
+    elif [ ! -f "${1}" ]; then
+      rerun_log debug ">> Suggested source file at ${1} does not exist";
       return 20;
+    else
+      if [ ! -w "$(dirname \"${2}\")" ]; then
+        NEEDROOT="y";
+    fi;
+
+    if [ -z "${2}" ]; then
+      rerun_log debug ">> Empty/No <atPath> provided";
+      return 30;
+    else
+      rerun_log debug ">> File at '${2}' does not exist";
     fi
 
-    read -p "No file found at ${1}, shall ${2} be copied there? (y/n)" USEDEFF;
+    PTEXT="No file found at ${2}, shall ${1} be copied there";
+    [ "${NEEDROOT}" == "y" ] && PTEXT="${PTEXT} (will run with sudo)"
+    PTEXT="${PTEXT}? (y/n)";
+    read -p "${PTEXT}" USEDEFF;
 
     if [[ ${USEDEFF} == y* || ${USEDEFF} == Y* ]]; then
-      rerun_log info "Creating file '${1}' by copying '${2}'";
-      cp "${2}" "${1}";
+      rerun_log info "Creating file '${2}' by copying '${1}'";
+      [ "${NEEDROOT}" == "y" ] && sudo cp "${1}" "${2}" || cp "${1}" "${2}";
     else
-      rerun_log debug ">> User disallowed coping ${2} to ${1}";
-      return 30;
+      rerun_log debug ">> User disallowed coping ${1} to ${2}";
+      return 40;
     fi
   else
-    rerun_log debug ">> File ${1} already exists. All right then.";
+    rerun_log debug ">> File ${2} already exists. All right then";
     return 0;
   fi
 }
