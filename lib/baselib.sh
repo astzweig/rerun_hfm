@@ -62,7 +62,7 @@ function createDirIfNotExists {
 }
 
 function createFileByCpIfNotExists {
-  # Usage: createFileByCpIfNotExists <fromPathSuggestion> <atPath>
+  # Usage: createFileByCpIfNotExists <fromPathSuggestion> <atPath> [<overwrite> <y/n>]
   #
   # Copies a file from a suggested path if user agrees and file
   # does not exists already.
@@ -70,7 +70,9 @@ function createFileByCpIfNotExists {
   # @args:
   #   str fromPathSuggestion: A suggestion path, where the file shall be copied
   #                           from.
-  #   str atPath: The path, where the file shall be copied to.
+  #   str atPath:             The path, where the file shall be copied to.
+  #   bool overwrite:         Shall destination be overwritten, if already
+  #                           existant?
   #
   # @version: 1.0
   # @see: rerun_log
@@ -85,7 +87,7 @@ function createFileByCpIfNotExists {
   rerun_log debug "Entering ${FUNCNAME} with ${#} arguments";
   local USEDEFF PTEXT="" NEEDROOT="n";
 
-  if [ ! -f "${2}" ]; then
+  if [ ! -f "${2}" -o "${3}" == "y" ]; then
     if [ -z "${1}" ]; then
       rerun_log debug ">> Empty/No <fromPathSuggestion> provided";
       return 10;
@@ -104,7 +106,11 @@ function createFileByCpIfNotExists {
       fi
     fi
 
-    PTEXT="No file found at ${2}, shall ${1} be copied there";
+    if [ ! -f "${2}" ]; then
+      PTEXT="No file found at ${2},"$'\n'"shall ${1} be copied there";
+    else
+      PTEXT="File found at ${2},"$'\n'"shall ${1} be still copied there";
+    fi
     [ "${NEEDROOT}" == "y" ] && PTEXT="${PTEXT}(will run with sudo)"
     PTEXT="${PTEXT}? (y/n)";
     read -p $'\n'"${PTEXT}" USEDEFF;
