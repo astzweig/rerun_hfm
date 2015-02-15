@@ -9,7 +9,7 @@
 # The `command` and `usage` comments describe the command
 # and show its options.
 # 
-#/ command: hfm:activate: "Activate a host file, choosen by environment option"
+#/ command: hfm:activate: "Activate a host file, choosen by environment option (Requires root privleges)"
 #/ usage: rerun hfm:activate [ --environment|-e <default>] 
 
 # Load common functions
