@@ -61,8 +61,8 @@ function createDirIfNotExists {
   fi
 }
 
-function createFileByCpIfNotExists {
-  # Usage: createFileByCpIfNotExists <fromPathSuggestion> <atPath> [<overwrite> <y/n>]
+function createFileByCp {
+  # Usage: createFileByCp <fromPathSuggestion> <atPath> [<overwrite> <y/n>]
   #
   # Copies a file from a suggested path if user agrees and file
   # does not exists already.
@@ -77,7 +77,7 @@ function createFileByCpIfNotExists {
   # @version: 1.0
   # @see: rerun_log
   # @examples:
-  #   createFileByCpIfNotExists /etc/host ${HFM_DIR}/default
+  #   createFileByCp /etc/host ${HFM_DIR}/default
   # @errors:
   #   10: <fromPathSuggestion> is empty.
   #   20: <fromPathSuggestion> is not a valid path to a file.

@@ -35,7 +35,7 @@ function f_checkIfAppAlreadyInitialized {
   fi
 
   if [ ! -f "${DEFAULT_FILE}" ]; then
-    RETURNVAL=$(createFileByCpIfNotExists \
+    RETURNVAL=$(createFileByCp \
                 "${HOST_FILE_LOC}" "${DEFAULT_FILE}");
 
     if [ ! -f "${DEFAULT_FILE}" ]; then
