@@ -40,7 +40,7 @@ function createDirIfNotExists {
   }
 
   # Everything ready to create directory, so ask user.
-  read -p "A directory at \"${1}\" is required.\
+  read -p $'\n'"A directory at \"${1}\" is required."$'\n'"\
            Shall one be created now? (y/n)" ANS;
 
   # Check if ANS begins with "y" or "Y"
@@ -92,10 +92,6 @@ function createFileByCpIfNotExists {
     elif [ ! -f "${1}" ]; then
       rerun_log debug ">> Suggested source file at ${1} does not exist";
       return 20;
-    else
-      if [ ! -w "$(dirname \"${2}\")" ]; then
-        NEEDROOT="y";
-      fi
     fi
 
     if [ -z "${2}" ]; then
@@ -103,12 +99,15 @@ function createFileByCpIfNotExists {
       return 30;
     else
       rerun_log debug ">> File at '${2}' does not exist";
+      if [ ! -w "$(dirname \"${2}\")" ]; then
+        NEEDROOT="y";
+      fi
     fi
 
     PTEXT="No file found at ${2}, shall ${1} be copied there";
-    [ "${NEEDROOT}" == "y" ] && PTEXT="${PTEXT} (will run with sudo)"
+    [ "${NEEDROOT}" == "y" ] && PTEXT="${PTEXT}(will run with sudo)"
     PTEXT="${PTEXT}? (y/n)";
-    read -p "${PTEXT}" USEDEFF;
+    read -p $'\n'"${PTEXT}" USEDEFF;
 
     if [[ ${USEDEFF} == y* || ${USEDEFF} == Y* ]]; then
       rerun_log info "Creating file '${2}' by copying '${1}'";
