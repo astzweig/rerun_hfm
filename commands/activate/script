@@ -58,6 +58,8 @@ rerun_options_parse "$@"
 
 # Command implementation
 # ----------------------
+[ -f "${HFM_DIR}/${ENVIRONMENT}" ] && \
+  createFileByCp "${HFM_DIR}/${ENVIRONMENT}" "${HOST_FILE_LOC}" y;
 
 
 # Done. Exit with last command exit status.
