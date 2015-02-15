@@ -99,7 +99,7 @@ function createFileByCpIfNotExists {
       return 30;
     else
       rerun_log debug ">> File at '${2}' does not exist";
-      if [ ! -w "$(dirname \"${2}\")" ]; then
+      if [ ! -w "$(dirname ${2})" ]; then
         NEEDROOT="y";
       fi
     fi
