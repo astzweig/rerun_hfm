@@ -95,7 +95,8 @@ function createFileByCpIfNotExists {
     else
       if [ ! -w "$(dirname \"${2}\")" ]; then
         NEEDROOT="y";
-    fi;
+      fi
+    fi
 
     if [ -z "${2}" ]; then
       rerun_log debug ">> Empty/No <atPath> provided";
