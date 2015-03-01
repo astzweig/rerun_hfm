@@ -1,7 +1,7 @@
 #!/usr/bin/env roundup
 #
 # addlib test
-#/ usage: rerun stubbs:test -m MODULE -p addlib
+#/ usage: rerun stubbs:test -m MODULE
 #
 # Author: Ines Neubach <ines.neubach@idn.astzweig.de>
 #
