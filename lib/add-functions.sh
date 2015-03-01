@@ -38,6 +38,45 @@ function checkHostAndIPAddress {
   return 0;
 }
 
+function createHostFileByTemplate {
+  # Usage: createHostFileByTemplate <destPath> <template1> ... <templateN>
+  #
+  # Creates a new host file (if not exists) and asks user for permission and
+  # if file shall be based on one of the given templates.
+  #
+  # @args:
+  #   str destPath:     The path where the new file shall be created
+  #   str template1..N: The selectable templates, which new file shall be based
+  #                     on
+  #
+  # @version: 1.0
+  # @see: rerun_log
+  # @examples:
+  #   createHostFileByTemplate "${HFM_DIR}/newenvironment" ${HFM_DIR}/*
+  # @errors:
+  #   10: Empty <destPath> given
+  #   20: <destPath> already exists
+  #   30: Parent directory of <destPath> does not exist
+  #
+  rerun_log debug "Entering createHostFileByTemplate function with $# arguments";
+  local USEDEFF PTEXT DESTPATH;
+  DESTPATH="${1}";
+  [ -z "${1}" ] && return 10;
+  [ -f "${1}" ] && return 20;
+  [ ! -d "$(dirname ${1})" ] && return 30;
+
+  PTEXT="A new file at ${DESTPATH} is needed. Shall one be created?"
+  read -p $'\n'"${PTEXT}" USEDEFF;
+
+  if [[ ${USEDEFF} == y* || ${USEDEFF} == Y* ]]; then
+    echo "##"$'\n'"#"$'\n'"# hfm host file for \
+          $(basename ${DESTPATH%.*}) environment" >> ${1};
+  else
+    rerun_log debug ">> User disallowed creation of ${1}";
+    return 40;
+  fi
+}
+
 function addHostToFileIfNotExists {
   # Usage: addHostToFileIfNotExists <filePath> <host> <ipaddress>
   #
