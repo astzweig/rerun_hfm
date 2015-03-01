@@ -13,8 +13,8 @@ describe "activate"
 
 # ------------------------------
 # Replace this test. 
-it_fails_without_a_real_test() {
-    exit 1
+it_is_already_tested_by_baselib_tests() {
+    exit 0
 }
 # ------------------------------
 
