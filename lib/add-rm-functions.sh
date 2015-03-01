@@ -129,6 +129,7 @@ function addHostToFileIfNotExists {
   # @errors:
   #   10-20: see checkHostAndIPAddress
   #   30:    Invalid host file path given
+  #   40:    Host exists already in <filePath>
   #
   rerun_log debug "Entering addHostToFileIfNotExists function with $# arguments";
   local RETV;
@@ -137,6 +138,13 @@ function addHostToFileIfNotExists {
   checkHostAndIPAddress "$2" "$3";
   RETV=$?
   [ ${RETV} -ne 0 ] && return ${RETV};
+
+  for i in $(echo "${2}" | tr " " "\n"); do
+    if [ $(cat ${1} | grep ${i} | wc -l | sed 's/^ *//g') -ne 0 ]; then
+      rerun_log debug ">> The host ${i} is already in the hosts file ${1}.";
+      return 40;
+    fi;
+  done
 
   echo -e "${3}\t${2}" >> "${1}"
   return 0;
