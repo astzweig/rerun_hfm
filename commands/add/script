@@ -47,7 +47,7 @@ set -o nounset -o pipefail
 # declared by `rerun` or by the option parser function.
 
 #/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
-#/ option-variables: ADDRESS
+#/ option-variables: ENVIRONMENT, ADDRESS
 
 # The `rerun_options_parse` function processes the command line
 # arguments. Each accepted command line flag results in setting 
@@ -58,10 +58,9 @@ rerun_options_parse "$@"
 
 # Command implementation
 # ----------------------
-
-# - - -
-# Put the command implementation here.
-# - - -
+[ ! -f "${HFM_DIR}/${ENVIRONMENT}" ] && \
+  createHostFileByTemplate "${HFM_DIR}/${ENVIRONMENT}" ${HFM_DIR}/*;
+addHostToFileIfNotExists "${HFM_DIR}/${ENVIRONMENT}" "${1}" "${ADDRESS}";
 
 # Done. Exit with last command exit status.
 exit $?
