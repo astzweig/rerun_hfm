@@ -9,7 +9,7 @@
 # Include addlib file
 # -----------------
 MODULE="$(basename $(cd ..; pwd))";
-LIB_PATH="${RERUN_MODULES}/${MODULE}/lib/add-functions.sh";
+LIB_PATH="${RERUN_MODULES}/${MODULE}/lib/add-rm-functions.sh";
 if [ ! -f ${LIB_PATH} ]; then
     exit;
 fi

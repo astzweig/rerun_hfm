@@ -49,7 +49,7 @@ fi
 # - - -
 
 # Include command specific functions
-for file in $(ls ${RERUN_MODULE_DIR}/lib/*${1}-functions.sh 2> /dev/null);
+for file in $(ls ${RERUN_MODULE_DIR}/lib/*${1}*-functions.sh 2> /dev/null);
 do
   if [ -f "${file}" ]; then
     source "${file}" || {
