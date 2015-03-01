@@ -82,7 +82,7 @@ function createHostFileByTemplate {
       TPLSPATH+=("$i");
     done
 
-    if [ $ISONEVALID ]; then
+    if [ $ISONEVALID == true ]; then
       local NANS="Dont use a template" TPLPATH="";
       TPLS+=("${NANS}");
       PS3="The following templates are available. Choose one if you want: ";
@@ -95,12 +95,12 @@ function createHostFileByTemplate {
         done
       done
 
-      [ -f "${TPLPATH}" ] && cp ${TPLPATH} ${i};
+      [ -f "${TPLPATH}" ] && cp ${TPLPATH} ${DESTPATH};
     fi
 
-    if [ ! $ISONEVALID ]; then
+    if [ $ISONEVALID == false ]; then
       echo "##"$'\n'"#"$'\n'"# hfm host file for \
-            $(basename ${DESTPATH%.*}) environment" >> ${1};
+            $(basename ${DESTPATH%.*}) environment" >> "${DESTPATH}";
     fi
   else
     rerun_log debug ">> User disallowed creation of ${1}";
