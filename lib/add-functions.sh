@@ -22,7 +22,7 @@ function checkHostAndIPAddress {
   #   checkHostAndIPAddress "newhost.dev www.newhost.dev" 127.0.0.1
   # @errors:
   #   10: Invalid host given
-  #   20: Invalid IP address given.
+  #   20: Invalid IP address given
   #
   local DOMAINREGEX="^[a-zA-Z0-9]{1}[a-zA-Z0-9\.\-]+$";
   local IPREGEX="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$";
@@ -53,8 +53,7 @@ function addHostToFileIfNotExists {
   #   addHostToFileIfNotExists /etc/hosts "newhost.dev www.newhost.dev" 127.0.0.1
   # @errors:
   #   10-20: see checkHostAndIPAddress
-  #   30: Invalid host file path given
-  #   40: Invalid IP address given.
+  #   30:    Invalid host file path given
   #
   rerun_log info "Entering addHostToFileIfNotExists function with $# arguments";
   [ ! -f "$1" ] && return 30;
