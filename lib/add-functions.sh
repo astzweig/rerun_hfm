@@ -26,13 +26,13 @@ function checkHostAndIPAddress {
   #
   local DOMAINREGEX="^[a-zA-Z0-9]{1}[a-zA-Z0-9\.\-]+$";
   local IPREGEX="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$";
-  rerun_log info "Entering checkHostAndIPAddress function with $# arguments";
+  rerun_log debug "Entering checkHostAndIPAddress function with $# arguments";
   if [[ ! "$1" =~ $DOMAINREGEX ]]; then
-    rerun_log info ">> Invalid host name, returning";
+    rerun_log debug ">> Invalid host name, returning";
     return 10;
   fi
   if [[ ! $IP =~ $IPREGEX ]]; then
-    rerun_log info ">> Invalid ip address, returning";
+    rerun_log debug ">> Invalid ip address, returning";
     return 20;
   fi
   return 0;
@@ -55,13 +55,13 @@ function addHostToFileIfNotExists {
   #   10-20: see checkHostAndIPAddress
   #   30:    Invalid host file path given
   #
-  rerun_log info "Entering addHostToFileIfNotExists function with $# arguments";
+  rerun_log debug "Entering addHostToFileIfNotExists function with $# arguments";
+  local RETV;
+
   [ ! -f "$1" ] && return 30;
   checkHostAndIPAddress "$2" "$3";
-  if [ $? -ne 0 ]; then
-    rerun_log ">> Invalid arguments provided, returning";
-    return $?;
-  fi
+  RETV=$?
+  [ ${RETV} -ne 0 ] && return ${RETV};
 
   echo -e "${3}\t${2}" >> "${1}"
   return 0;
