@@ -58,10 +58,8 @@ rerun_options_parse "$@"
 
 # Command implementation
 # ----------------------
-
-# - - -
-# Put the command implementation here.
-# - - -
+[ -f "${HFM_DIR}/${ENVIRONMENT}" ] && \
+  rmHostFromFile "${HFM_DIR}/${ENVIRONMENT}" "${1}";
 
 # Done. Exit with last command exit status.
 exit $?
