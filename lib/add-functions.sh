@@ -27,10 +27,13 @@ function checkHostAndIPAddress {
   local DOMAINREGEX="^[a-zA-Z0-9]{1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,4}$";
   local IPREGEX="^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$";
   rerun_log debug "Entering checkHostAndIPAddress function with $# arguments";
-  if [[ ! "$1" =~ $DOMAINREGEX ]]; then
-    rerun_log debug ">> Invalid host name, returning";
-    return 10;
-  fi
+  [ -z "${1}" ] && return 10;
+  for i in $(echo "${1}" | tr " " "\n"); do
+    if [[ ! "$i" =~ $DOMAINREGEX ]]; then
+      rerun_log debug ">> Invalid host name ($i), returning";
+      return 10;
+    fi
+  done
   if [[ ! "${2}" =~ $IPREGEX ]]; then
     rerun_log debug ">> Invalid ip address, returning";
     return 20;

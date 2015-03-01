@@ -39,6 +39,12 @@ it_stops_with_invalid_ip() {
   test ${RETV} -eq 20;
 }
 
+it_runs_with_multiple_host_and_valid_ip() {
+  local RETV;
+  RETV="$(checkHostAndIPAddress "www.validhost.de validhost.de" "127.0.0.1" && echo $? || echo $?)";
+  test ${RETV} -eq 0;
+}
+
 it_runs_with_valid_host_and_ip() {
   local RETV;
   RETV="$(checkHostAndIPAddress "validhost.de" "127.0.0.1" && echo $? || echo $?)";
