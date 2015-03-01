@@ -57,6 +57,7 @@ function createHostFileByTemplate {
   #   10: Empty <destPath> given
   #   20: <destPath> already exists
   #   30: Parent directory of <destPath> does not exist
+  #   40: User disallowed creation of <destPath>
   #
   rerun_log debug "Entering createHostFileByTemplate function with $# arguments";
   local USEDEFF PTEXT DESTPATH;
@@ -69,8 +70,38 @@ function createHostFileByTemplate {
   read -p $'\n'"${PTEXT}" USEDEFF;
 
   if [[ ${USEDEFF} == y* || ${USEDEFF} == Y* ]]; then
-    echo "##"$'\n'"#"$'\n'"# hfm host file for \
-          $(basename ${DESTPATH%.*}) environment" >> ${1};
+    shift;
+    local ISONEVALID=false;
+    declare -a TPLS=();
+    declare -a TPLSPATH=();
+
+    for i in "$@"; do
+      [ ! -f "$i" ] && continue;
+      ISONEVALID=true;
+      TPLS+=("$(basename $i)");
+      TPLSPATH+=("$i");
+    done
+
+    if [ $ISONEVALID ]; then
+      local NANS="Dont use a template" TPLPATH="";
+      TPLS+=("${NANS}");
+      PS3="The following templates are available. Choose one if you want: ";
+
+      select opt in "${TPLS[@]}"; do
+        [ "${opt}" == "${NANS}" ] && ISONEVALID=false && break;
+
+        for i in "${TPLSPATH[@]}"; do
+          [ "${opt}" == "$(basename ${i})" ] && TPLPATH="${i}" && break;
+        done
+      done
+
+      [ -f "${TPLPATH}" ] && cp ${TPLPATH} ${i};
+    fi
+
+    if [ ! $ISONEVALID ]; then
+      echo "##"$'\n'"#"$'\n'"# hfm host file for \
+            $(basename ${DESTPATH%.*}) environment" >> ${1};
+    fi
   else
     rerun_log debug ">> User disallowed creation of ${1}";
     return 40;
