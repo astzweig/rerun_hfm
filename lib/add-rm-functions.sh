@@ -120,6 +120,7 @@ function addHostToFileIfNotExists {
   #
   # @args:
   #   str filePath:  The path to the (host)file, where the host shall be added
+  #   str host:      The hostname
   #   str ipaddress: The ip address of the host
   #
   # @version: 1.0
@@ -147,5 +148,42 @@ function addHostToFileIfNotExists {
   done
 
   echo -e "${3}\t${2}" >> "${1}"
+  return 0;
+}
+
+function rmHostFromFile {
+  # Usage: rmHostFromFile <filePath> <hosts>
+  #
+  # Removes an host with its address from the specified file.
+  #
+  # @args:
+  #   str filePath:  The path to the (host)file, where the host shall be added
+  #   str hosts:     A space seperated list of hostnames
+  #
+  # @version: 1.0
+  # @see: rerun_log
+  # @examples:
+  #   rmHostFromFile /etc/hosts "newhost.dev www.newhost.dev" 127.0.0.1
+  # @errors:
+  #   10: <filePath> does not exist
+  #   20: Cannot create temporary file
+  #
+  rerun_log debug "Entering rmHostFromFile function with $# arguments";
+  local RETV;
+
+  [ ! -f "$1" ] && return 10;
+
+  tempfoo=`basename $0`
+  TMPFILE=`mktemp -q /tmp/${tempfoo}.XXXXXX`
+  trap "rm -f ${TMPFILE}" EXIT INT;
+  if [ $? -ne 0 ]; then
+     rerun_log debug ">> Can't create temp file, returning"
+     return 20;
+  fi
+
+  for i in $(echo "${2}" | tr " " "\n"); do
+    cat "$1" | sed -e "/$2\$/ d" > "${TMPFILE}" && mv "${TMPFILE}" "$1"
+    return $?;
+  done
   return 0;
 }
