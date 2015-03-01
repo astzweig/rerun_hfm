@@ -41,7 +41,7 @@ function createDirIfNotExists {
 
   # Everything ready to create directory, so ask user.
   read -p $'\n'"A directory at \"${1}\" is required."$'\n'"\
-           Shall one be created now? (y/n)" ANS;
+Shall one be created now? (y/n) " ANS;
 
   # Check if ANS begins with "y" or "Y"
   if [[ ${ANS} == y* || ${ANS} == Y* ]]; then
@@ -107,12 +107,12 @@ function createFileByCp {
     fi
 
     if [ ! -f "${2}" ]; then
-      PTEXT="No file found at ${2},"$'\n'"shall ${1} be copied there";
+      PTEXT="No file found at ${2},"$'\n'"Shall ${1} be copied there";
     else
-      PTEXT="File found at ${2},"$'\n'"shall ${1} be still copied there";
+      PTEXT="File found at ${2},"$'\n'"Shall ${1} be still copied there";
     fi
     [ "${NEEDROOT}" == "y" ] && PTEXT="${PTEXT}(will run with sudo)"
-    PTEXT="${PTEXT}? (y/n)";
+    PTEXT="${PTEXT}? (y/n) ";
     read -p $'\n'"${PTEXT}" USEDEFF;
 
     if [[ ${USEDEFF} == y* || ${USEDEFF} == Y* ]]; then

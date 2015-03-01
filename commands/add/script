@@ -10,7 +10,7 @@
 # and show its options.
 # 
 #/ command: hfm:add: "Add host to host file given by environment option"
-#/ usage: rerun hfm:add [ --address <127.0.0.1>] [ --environment|-e <default>] host 
+#/ usage: rerun hfm:add [ --address|-a <127.0.0.1>] [ --environment|-e <default>] <host>
 
 # Load common functions
 # ---------------------
@@ -47,7 +47,7 @@ set -o nounset -o pipefail
 # declared by `rerun` or by the option parser function.
 
 #/ rerun-variables: RERUN, RERUN_VERSION, RERUN_MODULES, RERUN_MODULE_DIR
-#/ option-variables: ENVIRONMENT, ADDRESS
+#/ option-variables: ADDRESS ENVIRONMENT
 
 # The `rerun_options_parse` function processes the command line
 # arguments. Each accepted command line flag results in setting 
@@ -58,9 +58,10 @@ rerun_options_parse "$@"
 
 # Command implementation
 # ----------------------
+for last; do true; done;
 [ ! -f "${HFM_DIR}/${ENVIRONMENT}" ] && \
   createHostFileByTemplate "${HFM_DIR}/${ENVIRONMENT}" ${HFM_DIR}/*;
-addHostToFileIfNotExists "${HFM_DIR}/${ENVIRONMENT}" "${1}" "${ADDRESS}";
+addHostToFileIfNotExists "${HFM_DIR}/${ENVIRONMENT}" "${last}" "${ADDRESS}";
 
 # Done. Exit with last command exit status.
 exit $?

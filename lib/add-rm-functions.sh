@@ -69,7 +69,7 @@ function createHostFileByTemplate {
   [ -f "${1}" ] && return 20;
   [ ! -d "$(dirname ${1})" ] && return 30;
 
-  PTEXT="A new file at ${DESTPATH} is needed. Shall one be created?"
+  PTEXT="A new file at ${DESTPATH} is needed."$'\n'"Shall one be created? (y/n) "
   read -p $'\n'"${PTEXT}" USEDEFF;
 
   if [[ ${USEDEFF} == y* || ${USEDEFF} == Y* ]]; then
@@ -88,15 +88,17 @@ function createHostFileByTemplate {
     if [ $ISONEVALID == true ]; then
       local NANS="Dont use a template" TPLPATH="" OLDPSV="";
       TPLS+=("${NANS}");
-      OLDPSV="${PS3}";
-      PS3="The following templates are available. Choose one if you want: ";
+      OLDPSV="${PS3+}";
+      rerun_log info "The following templates are available. Choose one if you want: ";
+      PS3="Your selection: ";
 
       select opt in "${TPLS[@]}"; do
         [ "${opt}" == "${NANS}" ] && ISONEVALID=false && break;
 
         for i in "${TPLSPATH[@]}"; do
-          [ "${opt}" == "$(basename ${i})" ] && TPLPATH="${i}" && break;
+          [ "${opt}" == "$(basename ${i})" ] && TPLPATH="${i}";
         done
+        [ -f "${TPLPATH}" ] && break;
       done
 
       PS3="${OLDPSV}";
@@ -105,7 +107,7 @@ function createHostFileByTemplate {
 
     if [ $ISONEVALID == false ]; then
       echo "##"$'\n'"#"$'\n'"# hfm host file for \
-            $(basename ${DESTPATH%.*}) environment" >> "${DESTPATH}";
+$(basename ${DESTPATH}) environment" >> "${DESTPATH}";
     fi
   else
     rerun_log debug ">> User disallowed creation of ${1}";
@@ -142,7 +144,7 @@ function addHostToFileIfNotExists {
 
   for i in $(echo "${2}" | tr " " "\n"); do
     if [ $(cat ${1} | grep ${i} | wc -l | sed 's/^ *//g') -ne 0 ]; then
-      rerun_log debug ">> The host ${i} is already in the hosts file ${1}.";
+      rerun_log warn ">> The host ${i} is already in the hosts file ${1}.";
       return 40;
     fi;
   done
