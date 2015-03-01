@@ -83,8 +83,9 @@ function createHostFileByTemplate {
     done
 
     if [ $ISONEVALID == true ]; then
-      local NANS="Dont use a template" TPLPATH="";
+      local NANS="Dont use a template" TPLPATH="" OLDPSV="";
       TPLS+=("${NANS}");
+      OLDPSV="${PS3}";
       PS3="The following templates are available. Choose one if you want: ";
 
       select opt in "${TPLS[@]}"; do
@@ -95,6 +96,7 @@ function createHostFileByTemplate {
         done
       done
 
+      PS3="${OLDPSV}";
       [ -f "${TPLPATH}" ] && cp ${TPLPATH} ${DESTPATH};
     fi
 
