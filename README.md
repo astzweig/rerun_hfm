@@ -1,6 +1,6 @@
 hfm (rerun)
 =========
-This is a little terminal host file manager. It is a [rerun][1] module, but you can download an archieved (.bin) version which is directly runable.
+This is a little terminal host file manager. It is a [rerun][1] module, but you can download an archieved (.bin) version which is directly runnable.
 
 [1]: https://github.com/rerun/rerun
 
