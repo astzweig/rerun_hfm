@@ -37,10 +37,11 @@ Add "example.de" host with default IP "127.0.0.1" to "development" host file:
 
 	# Creates a copy of /etc/host > renames it to
 	# development and adds host line
-    rerun hfm:add -h example.de
+    rerun hfm:add example.de
     
-    # Backup /etc/host and replace it with newly created
+    # Replace /etc/hosts with newly created
     # development host file
+    # WARNING: /etc/hosts will be overwritten
     rerun hfm:activate -e development
 
 To get original host file back run:
@@ -49,7 +50,6 @@ To get original host file back run:
 
 Features
 ----
- - Add/Remove/Update host in host file
+ - Add/Remove host in host file
  - Manage multiple host files (production, development, default)
- - Master templating
- - Backup of original /etc/host file (before initial use of hfm module)
+ - Backup of original /etc/host file to HFM_DIR/default (before initial use of hfm module)
